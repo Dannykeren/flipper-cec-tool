@@ -3,11 +3,10 @@ App(
     name="CEC Test Tool",
     apptype=FlipperAppType.EXTERNAL,
     entry_point="cec_test_tool_app",
-    requires=["gui", "expansion"],
+    requires=["gui"],
     stack_size=2 * 1024,
-    order=10,
     fap_category="GPIO",
-    fap_description="HDMI CEC protocol testing tool for Video Game Module",
+    fap_description="HDMI CEC protocol testing tool",
     fap_author="Dannykeren",
     fap_version="1.0",
 )
