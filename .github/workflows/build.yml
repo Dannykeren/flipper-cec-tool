@@ -33,7 +33,7 @@ jobs:
 
     - name: Clone Momentum Firmware
       run: |
-        git clone --recursive https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/Next-Hack/Momentum-Firmware.git flipperzero-firmware
+        git clone --recursive https://github.com/Next-Flip/Momentum-Firmware.git flipperzero-firmware
         cd flipperzero-firmware
         git checkout mntm-010
 
