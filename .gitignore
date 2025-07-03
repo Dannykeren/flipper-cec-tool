@@ -1,0 +1,85 @@
+# Flipper Zero CEC Tool - Git Ignore File
+
+# Build outputs
+build/
+dist/
+*.fap
+*.elf
+*.bin
+*.hex
+
+# Compiled Object files
+*.o
+*.obj
+*.lo
+*.slo
+*.ko
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.cache
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Flipper specific
+flipperzero-firmware/
+.fbt_cache/
+.sconsign.dblite
+
+# Local development
+*.local
+.env
+.env.local
+
+# Release artifacts
+/*.fap
+/*.elf
+/*.bin
