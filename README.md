@@ -20,7 +20,7 @@ A comprehensive HDMI CEC (Consumer Electronics Control) test tool for Flipper Ze
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Flipper Zero with [Momentum firmware v010](https://github.com/Next-Hack/Momentum-Firmware)
+- Flipper Zero with [Momentum firmware v010](https://github.com/Next-Flip/Momentum-Firmware)
 - Video Game Module for Flipper Zero
 - HDMI cable
 - TV/device with CEC support
@@ -93,7 +93,7 @@ flipper-cec-tool/
 ### Building Locally
 ```bash
 # Clone Momentum firmware
-git clone --recursive https://github.com/Next-Hack/Momentum-Firmware.git
+git clone --recursive https://github.com/Next-Flip/Momentum-Firmware.git
 cd Momentum-Firmware
 
 # Copy app
