@@ -6,10 +6,8 @@ App(
     requires=["gui", "expansion"],
     stack_size=2 * 1024,
     order=10,
-    fap_icon="cec_test_tool.png",
     fap_category="GPIO",
     fap_description="HDMI CEC protocol testing tool for Video Game Module",
-    fap_author="Your Name",
+    fap_author="Dannykeren",
     fap_version="1.0",
-    fap_icon_assets="icons",
 )
