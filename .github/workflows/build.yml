@@ -46,6 +46,10 @@ jobs:
       run: |
         mkdir -p flipperzero-firmware/applications/external/cec_test_tool
         cp -r src/* flipperzero-firmware/applications/external/cec_test_tool/
+        echo "=== Checking copied files ==="
+        ls -la flipperzero-firmware/applications/external/cec_test_tool/
+        echo "=== Checking application.fam content ==="
+        cat flipperzero-firmware/applications/external/cec_test_tool/application.fam
 
     - name: Build Application
       run: |
