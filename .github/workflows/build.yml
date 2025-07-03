@@ -36,20 +36,26 @@ jobs:
         mkdir -p flipperzero-firmware/applications/external/cec_test_tool
         cp -r src/* flipperzero-firmware/applications/external/cec_test_tool/
     
-    - name: Build CEC App
+    - name: Build All Apps (Including CEC)
       run: |
         cd flipperzero-firmware
-        ./fbt fap_cec_test_tool
+        ./fbt fap_dist
     
-    - name: Find and Upload CEC App
+    - name: Extract CEC App
       run: |
         cd flipperzero-firmware
-        find . -name "*cec*" -name "*.fap" -type f
         mkdir -p ../release
-        cp ./dist/f7-D/apps/GPIO/cec_test_tool.fap ../release/ || cp ./build/f7-firmware-D/.extapps/cec_test_tool.fap ../release/
+        echo "Looking for CEC app..."
+        ls -la ./dist/f7-D/apps/GPIO/
+        echo "Checking build folder..."
+        ls -la ./build/f7-firmware-D/.extapps/ | grep -i cec || echo "No CEC in extapps"
+        echo "Copying GPIO apps..."
+        cp ./dist/f7-D/apps/GPIO/*.fap ../release/
+        echo "Files copied:"
+        ls -la ../release/
     
-    - name: Upload Build Artifacts
+    - name: Upload All GPIO Apps
       uses: actions/upload-artifact@v4
       with:
-        name: cec-test-tool-${{ github.sha }}
-        path: release/cec_test_tool.fap
+        name: gpio-apps-${{ github.sha }}
+        path: release/
