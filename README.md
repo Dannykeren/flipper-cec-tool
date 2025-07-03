@@ -80,3 +80,59 @@ Enable CEC in your TV settings. Look for:
 ## 🔧 Development
 
 ### Project Structure
+flipper-cec-tool/
+├── .github/workflows/    # Automated builds
+├── src/                  # Source code
+│   ├── cec_test_tool.c  # Main application
+│   ├── application.fam  # App manifest
+│   └── icons/           # App icons
+├── docs/                # Documentation
+├── README.md           # This file
+└── CHANGELOG.md        # Version history
+
+### Building Locally
+```bash
+# Clone Momentum firmware
+git clone --recursive https://github.com/Next-Hack/Momentum-Firmware.git
+cd Momentum-Firmware
+
+# Copy app
+cp -r ../src applications/external/cec_test_tool/
+
+# Build
+./fbt fap_cec_test_tool
+Contributing
+
+Fork the repository
+Create a feature branch
+Make your changes
+Test thoroughly
+Submit a pull request
+
+📋 Changelog
+See CHANGELOG.md for detailed version history.
+🐛 Bug Reports
+Found a bug? Please create an issue with:
+
+Flipper Zero firmware version
+TV/device model
+Steps to reproduce
+Expected vs actual behavior
+
+📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
+🙏 Acknowledgments
+
+Flipper Zero Team for the amazing platform
+Momentum Firmware Team for enhanced features
+HDMI CEC specification contributors
+Community testers and contributors
+
+📞 Support
+
+📚 Documentation
+💬 Discussions
+🐛 Issues
+
+
+⭐ If this tool helped you, please consider giving it a star! ⭐
