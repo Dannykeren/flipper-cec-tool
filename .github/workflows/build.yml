@@ -55,7 +55,14 @@ jobs:
     - name: Prepare Release Files
       run: |
         mkdir -p release
-        cp flipperzero-firmware/build/f7-firmware-D/cec_test_tool.fap release/
+        if [ -f flipperzero-firmware/build/f7-firmware-D/cec_test_tool.fap ]; then
+          cp flipperzero-firmware/build/f7-firmware-D/cec_test_tool.fap release/
+        elif [ -f flipperzero-firmware/build/f7-firmware-R/cec_test_tool.fap ]; then
+          cp flipperzero-firmware/build/f7-firmware-R/cec_test_tool.fap release/
+        else
+          echo "App .fap file not found!"
+          exit 1
+        fi
         cp README.md release/
         cp CHANGELOG.md release/
         
