@@ -85,7 +85,7 @@ static void cec_test_tool_submenu_callback(void* context, uint32_t index) {
         case CECTestToolSubmenuIndexSettings:
             text_input_set_header_text(app->text_input, "Set CEC Address (0-14)");
             text_input_set_result_callback(app->text_input, 
-                (TextInputCallback)view_dispatcher_switch_to_view, 
+                NULL,
                 app->view_dispatcher, app->text_input_buffer, sizeof(app->text_input_buffer), true);
             snprintf(app->text_input_buffer, sizeof(app->text_input_buffer), "%d", app->cec_address);
             view_dispatcher_switch_to_view(app->view_dispatcher, CECTestToolViewTextInput);
@@ -99,6 +99,7 @@ static void cec_test_tool_popup_callback(void* context) {
 }
 
 static void cec_test_tool_dialog_callback(DialogExResult result, void* context) {
+    (void)result;
     CECTestTool* app = context;
     view_dispatcher_switch_to_view(app->view_dispatcher, CECTestToolViewSubmenu);
 }
@@ -185,7 +186,7 @@ int32_t cec_test_tool_app(void* p) {
     
     view_dispatcher_run(app->view_dispatcher);
     
-    view_dispatcher_detach_from_gui(app->view_dispatcher);
+    //view_dispatcher_detach_from_gui(app->view_dispatcher);
     furi_record_close(RECORD_GUI);
     
     cec_test_tool_free(app);
