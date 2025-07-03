@@ -31,11 +31,10 @@ jobs:
           ./flipperzero-firmware
         key: ${{ runner.os }}-flipper-${{ hashFiles('**/requirements.txt') }}
     
-    - name: Clone Momentum Firmware
+     - name: Clone Flipper Firmware
       run: |
-        git clone --recursive https://github.com/Next-Hack/Momentum-Firmware.git flipperzero-firmware
+        git clone --recursive https://github.com/flipperdevices/flipperzero-firmware.git flipperzero-firmware
         cd flipperzero-firmware
-        git checkout mntm-010
     
     - name: Setup Flipper Build Environment
       run: |
