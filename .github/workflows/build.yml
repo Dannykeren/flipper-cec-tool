@@ -1,0 +1,118 @@
+name: Build Flipper CEC Tool
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ created ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Cache Flipper Build Tools
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/pip
+          ./flipperzero-firmware
+        key: ${{ runner.os }}-flipper-${{ hashFiles('**/requirements.txt') }}
+    
+    - name: Clone Momentum Firmware
+      run: |
+        git clone --recursive https://github.com/Next-Hack/Momentum-Firmware.git flipperzero-firmware
+        cd flipperzero-firmware
+        git checkout mntm-010
+    
+    - name: Setup Flipper Build Environment
+      run: |
+        cd flipperzero-firmware
+        ./fbt --verbose
+    
+    - name: Copy App to Firmware
+      run: |
+        mkdir -p flipperzero-firmware/applications/external/cec_test_tool
+        cp -r src/* flipperzero-firmware/applications/external/cec_test_tool/
+    
+    - name: Build Application
+      run: |
+        cd flipperzero-firmware
+        ./fbt fap_cec_test_tool
+    
+    - name: Prepare Release Files
+      run: |
+        mkdir -p release
+        cp flipperzero-firmware/build/f7-firmware-D/cec_test_tool.fap release/
+        cp README.md release/
+        cp CHANGELOG.md release/
+        
+        # Create installation instructions
+        cat > release/INSTALL.md << 'EOF'
+        # Installation Instructions
+        
+        ## Quick Install:
+        1. Connect your Flipper Zero to your computer
+        2. Open qFlipper
+        3. Go to File Manager
+        4. Navigate to `/ext/apps/GPIO/`
+        5. Copy `cec_test_tool.fap` to this folder
+        6. Disconnect Flipper Zero
+        7. On Flipper: Applications → GPIO → CEC Test Tool
+        
+        ## Requirements:
+        - Flipper Zero with Momentum firmware v010
+        - Video Game Module
+        - HDMI cable
+        
+        ## First Time Setup:
+        1. Attach Video Game Module to Flipper Zero
+        2. Connect HDMI cable to your TV
+        3. Enable CEC in your TV settings
+        4. Run the app and try "Device Discovery"
+        EOF
+    
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: flipper-cec-tool-${{ github.sha }}
+        path: release/
+    
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          release/cec_test_tool.fap
+          release/INSTALL.md
+          release/README.md
+          release/CHANGELOG.md
+        body: |
+          ## Changes in this version
+          Check CHANGELOG.md for detailed changes.
+          
+          ## Installation
+          1. Download `cec_test_tool.fap`
+          2. Copy to `/ext/apps/GPIO/` on your Flipper Zero
+          3. Run from Applications → GPIO → CEC Test Tool
+          
+          ## Requirements
+          - Flipper Zero with Momentum firmware v010
+          - Video Game Module
+          - HDMI cable
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
