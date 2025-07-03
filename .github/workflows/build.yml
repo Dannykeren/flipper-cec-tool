@@ -50,7 +50,7 @@ jobs:
     - name: Build Application
       run: |
         cd flipperzero-firmware
-        ./fbt fap_cec_test_tool
+        ./fbt launch APPSRC=applications/external/cec_test_tool
 
     - name: Prepare Release Files
       run: |
