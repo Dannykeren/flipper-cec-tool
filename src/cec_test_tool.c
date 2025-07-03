@@ -308,4 +308,99 @@ static CECTestTool* cec_test_tool_alloc() {
     submenu_add_item(app->submenu, "Settings", CECTestToolSubmenuIndexSettings, cec_test_tool_submenu_callback, app);
     
     view_set_previous_callback(submenu_get_view(app->submenu), cec_test_tool_navigation_callback);
-    view_di
+    view_dispatcher_add_view(app->view_dispatcher, CECTestToolViewSubmenu, submenu_get_view(app->submenu));
+    
+    // Text input
+    app->text_input = text_input_alloc();
+    view_set_previous_callback(text_input_get_view(app->text_input), cec_test_tool_navigation_callback);
+    view_dispatcher_add_view(app->view_dispatcher, CECTestToolViewTextInput, text_input_get_view(app->text_input));
+    
+    // Popup
+    app->popup = popup_alloc();
+    popup_set_callback(app->popup, cec_test_tool_popup_callback);
+    popup_set_context(app->popup, app);
+    popup_set_timeout(app->popup, 3000);
+    popup_enable_timeout(app->popup);
+    view_set_previous_callback(popup_get_view(app->popup), cec_test_tool_navigation_callback);
+    view_dispatcher_add_view(app->view_dispatcher, CECTestToolViewPopup, popup_get_view(app->popup));
+    
+    // Dialog
+    app->dialog = dialog_ex_alloc();
+    dialog_ex_set_result_callback(app->dialog, cec_test_tool_dialog_callback);
+    dialog_ex_set_context(app->dialog, app);
+    view_set_previous_callback(dialog_ex_get_view(app->dialog), cec_test_tool_navigation_callback);
+    view_dispatcher_add_view(app->view_dispatcher, CECTestToolViewDialog, dialog_ex_get_view(app->dialog));
+    
+    // Widget
+    app->widget = widget_alloc();
+    view_set_previous_callback(widget_get_view(app->widget), cec_test_tool_navigation_callback);
+    view_dispatcher_add_view(app->view_dispatcher, CECTestToolViewWidget, widget_get_view(app->widget));
+    
+    // Notifications
+    app->notifications = furi_record_open(RECORD_NOTIFICATION);
+    
+    return app;
+}
+
+static void cec_test_tool_free(CECTestTool* app) {
+    furi_record_close(RECORD_NOTIFICATION);
+    
+    view_dispatcher_remove_view(app->view_dispatcher, CECTestToolViewSubmenu);
+    view_dispatcher_remove_view(app->view_dispatcher, CECTestToolViewTextInput);
+    view_dispatcher_remove_view(app->view_dispatcher, CECTestToolViewPopup);
+    view_dispatcher_remove_view(app->view_dispatcher, CECTestToolViewDialog);
+    view_dispatcher_remove_view(app->view_dispatcher, CECTestToolViewWidget);
+    
+    submenu_free(app->submenu);
+    text_input_free(app->text_input);
+    popup_free(app->popup);
+    dialog_ex_free(app->dialog);
+    widget_free(app->widget);
+    
+    view_dispatcher_free(app->view_dispatcher);
+    
+    free(app);
+}
+
+int32_t cec_test_tool_app(void* p) {
+    UNUSED(p);
+    
+    CECTestTool* app = cec_test_tool_alloc();
+    
+    // Try to connect to expansion module
+    app->expansion = furi_record_open(RECORD_EXPANSION);
+    if(app->expansion) {
+        app->is_connected = true;
+        FURI_LOG_I(TAG, "Connected to expansion module");
+    } else {
+        FURI_LOG_W(TAG, "No expansion module detected");
+    }
+    
+    Gui* gui = furi_record_open(RECORD_GUI);
+    view_dispatcher_attach_to_gui(app->view_dispatcher, gui, ViewDispatcherTypeFullscreen);
+    view_dispatcher_switch_to_view(app->view_dispatcher, CECTestToolViewSubmenu);
+    
+    // Main loop
+    while(1) {
+        if(app->is_receiving) {
+            cec_receive_command(app);
+        }
+        
+        if(!view_dispatcher_is_running(app->view_dispatcher)) {
+            break;
+        }
+        
+        furi_delay_ms(50);
+    }
+    
+    if(app->expansion) {
+        furi_record_close(RECORD_EXPANSION);
+    }
+    
+    view_dispatcher_detach_from_gui(app->view_dispatcher);
+    furi_record_close(RECORD_GUI);
+    
+    cec_test_tool_free(app);
+    
+    return 0;
+}
