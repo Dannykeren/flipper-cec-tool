@@ -1,8 +1,8 @@
 # Flipper Zero CEC Test Tool
 
-[![Build Status](https://github.com/YOUR_USERNAME/flipper-cec-tool/workflows/Build%20Flipper%20CEC%20Tool/badge.svg)](https://github.com/YOUR_USERNAME/flipper-cec-tool/actions)
-[![Release](https://img.shields.io/github/v/release/YOUR_USERNAME/flipper-cec-tool)](https://github.com/YOUR_USERNAME/flipper-cec-tool/releases)
-[![Downloads](https://img.shields.io/github/downloads/YOUR_USERNAME/flipper-cec-tool/total)](https://github.com/YOUR_USERNAME/flipper-cec-tool/releases)
+[![Build Status](https://github.com/Dannykeren/flipper-cec-tool/workflows/Build%20Flipper%20CEC%20Tool/badge.svg)](https://github.com/Dannykeren/flipper-cec-tool/actions)
+[![Release](https://img.shields.io/github/v/release/Dannykeren/flipper-cec-tool)](https://github.com/Dannykeren/flipper-cec-tool/releases)
+[![Downloads](https://img.shields.io/github/downloads/Dannykeren/flipper-cec-tool/total)](https://github.com/Dannykeren/flipper-cec-tool/releases)
 
 A comprehensive HDMI CEC (Consumer Electronics Control) test tool for Flipper Zero with Video Game Module support.
 
