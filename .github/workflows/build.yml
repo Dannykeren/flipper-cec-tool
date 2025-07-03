@@ -21,10 +21,11 @@ jobs:
       with:
         python-version: '3.11'
     
-    - name: Clone Flipper Firmware
+    - name: Clone Stable Flipper Firmware
       run: |
         git clone --recursive https://github.com/flipperdevices/flipperzero-firmware.git flipperzero-firmware
         cd flipperzero-firmware
+        git checkout 0.103.1
     
     - name: Setup Flipper Build Environment
       run: |
@@ -36,26 +37,21 @@ jobs:
         mkdir -p flipperzero-firmware/applications/external/cec_test_tool
         cp -r src/* flipperzero-firmware/applications/external/cec_test_tool/
     
-    - name: Build All Apps (Including CEC)
+    - name: Build CEC App with Stable Firmware
       run: |
         cd flipperzero-firmware
-        ./fbt fap_dist
+        ./fbt fap_cec_test_tool
     
-    - name: Extract CEC App
+    - name: Find and Upload CEC App
       run: |
         cd flipperzero-firmware
+        find . -name "*.fap" -type f | grep -i cec
         mkdir -p ../release
-        echo "Looking for CEC app..."
-        ls -la ./dist/f7-D/apps/GPIO/
-        echo "Checking build folder..."
-        ls -la ./build/f7-firmware-D/.extapps/ | grep -i cec || echo "No CEC in extapps"
-        echo "Copying GPIO apps..."
-        cp ./dist/f7-D/apps/GPIO/*.fap ../release/
-        echo "Files copied:"
+        find . -name "*.fap" -type f -exec cp {} ../release/ \;
         ls -la ../release/
     
-    - name: Upload All GPIO Apps
+    - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: gpio-apps-${{ github.sha }}
+        name: cec-tool-stable-${{ github.sha }}
         path: release/
