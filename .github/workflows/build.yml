@@ -33,6 +33,7 @@ jobs:
 
     - name: Clone Momentum Firmware
       run: |
+        rm -rf flipperzero-firmware
         git clone --recursive https://github.com/Next-Flip/Momentum-Firmware.git flipperzero-firmware
         cd flipperzero-firmware
         git checkout mntm-010
