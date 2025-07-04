@@ -1,4 +1,3 @@
-#include <furi_hal_gpio.h>
 #include <furi.h>
 #include <gui/gui.h>
 #include <gui/view.h>
@@ -49,30 +48,10 @@ static void cec_test_tool_submenu_callback(void* context, uint32_t index) {
     
     switch(index) {
         case CECTestToolSubmenuIndexDeviceDiscovery:
-      // First check if module is connected
-      popup_set_header(app->popup, "Device Discovery", 0, 0, AlignCenter, AlignTop);
-    
-      // Try to detect Video Game Module via GPIO
-      furi_hal_gpio_init(&gpio_ext_pc0, GpioModeInput, GpioPullUp, GpioSpeedVeryHigh);
-      furi_hal_gpio_init(&gpio_ext_pc1, GpioModeInput, GpioPullUp, GpioSpeedVeryHigh);
-    
-      bool pin_pc0 = furi_hal_gpio_read(&gpio_ext_pc0);
-      bool pin_pc1 = furi_hal_gpio_read(&gpio_ext_pc1);
-    
-      char status_text[200];
-      snprintf(status_text, sizeof(status_text), 
-          "Module Detection:\n"
-          "GPIO PC0: %s\n"
-          "GPIO PC1: %s\n"
-          "Status: %s", 
-          pin_pc0 ? "HIGH" : "LOW",
-          pin_pc1 ? "HIGH" : "LOW",
-          (pin_pc0 || pin_pc1) ? "Module Detected" : "No Module Found"
-      );
-    
-      popup_set_text(app->popup, status_text, 0, 20, AlignCenter, AlignTop);
-      view_dispatcher_switch_to_view(app->view_dispatcher, CECTestToolViewPopup);
-      break;
+            popup_set_header(app->popup, "Device Discovery", 0, 0, AlignCenter, AlignTop);
+            popup_set_text(app->popup, "Scanning for CEC devices...\n(Video Game Module required)", 0, 20, AlignCenter, AlignTop);
+            view_dispatcher_switch_to_view(app->view_dispatcher, CECTestToolViewPopup);
+            break;
         case CECTestToolSubmenuIndexPowerControl:
             dialog_ex_set_header(app->dialog, "Power Control", 64, 0, AlignCenter, AlignTop);
             dialog_ex_set_text(app->dialog, "Control device power?\n(Video Game Module required)", 64, 20, AlignCenter, AlignTop);
